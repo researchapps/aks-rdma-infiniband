@@ -21,18 +21,19 @@ Depending on intended usage there are alterations that can be made to the `share
 
 ## Quickstart
 1. Clone repository
-2. Build & push image (this image will later be available on mcr):
+2. Download the new nvidia `MLNX_OFED_LINUX-24.04-0.7.0.0-ubuntu22.04-x86_64.iso` that is copied into the image for the Dockerfile. I chose this version based on the Azure Ubuntu HPC/AI image I chose with the same. I had to [agree to the license stuffs](https://developer.nvidia.com/networking/mlnx-ofed-eula?mtag=linux_sw_drivers&mrequest=downloads&mtype=ofed&mver=MLNX_OFED-24.04-0.7.0.0&mname=MLNX_OFED_LINUX-24.04-0.7.0.0-ubuntu22.04-x86_64.iso) and download to my host, thus the COPY. Mellanox used to allow you to just curl download, but Nvidia is being annoying.
+3. Build & push image (this image to a registry you can pull from):
     - build image locally: `docker build -t <image-name> .`
     - push image to ACR or other registry: https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-azure-cli
         - https://docs.microsoft.com/en-us/azure/container-registry/container-registry-auth-kubernetes#create-an-image-pull-secret
     - replace image name in `shared-hca-images/driver-installation.yml` with your image name
-3. Deploy manifests:
+4. Deploy manifests:
     - `kubectl apply -k shared-hca-images/.`
-4. Check installation logs to confirm driver installation 
+5. Check installation logs to confirm driver installation 
     -  `kubectl get pods`
     -  `kubectl logs <name of installation pod>`
     -  Wait until you see message indicating installation completed successfully
-5. Deploy MPI workload (refer to example test pods, `test-rdma-pods.yaml`, specifically the resources section to see how to pull resources)
+6. Deploy MPI workload (refer to example test pods, `test-rdma-pods.yaml`, specifically the resources section to see how to pull resources)
     -  `kubectl apply -f <rdma workload>`
 
 
